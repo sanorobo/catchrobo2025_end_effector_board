@@ -4,3 +4,6 @@
 [submodule "halx_driver"]
 	path = halx_driver
 	url = https://github.com/eyr1n/halx_driver.git
+[submodule "tutmath"]
+	path = tutmath
+	url = https://github.com/sanorobo/tutmath.git
