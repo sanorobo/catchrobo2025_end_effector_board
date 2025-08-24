@@ -63,7 +63,7 @@ target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE
 
 add_subdirectory(halx)
 add_subdirectory(halx_driver)
-add_subdirectory(tutmath)
+add_subdirectory(catchrobo2025_common)
 
 # Add linked libraries
 target_link_libraries(${CMAKE_PROJECT_NAME}
@@ -73,5 +73,5 @@ target_link_libraries(${CMAKE_PROJECT_NAME}
     halx
     halx::printf_float
     halx_driver
-    tutmath
+    catchrobo2025_common
 )
