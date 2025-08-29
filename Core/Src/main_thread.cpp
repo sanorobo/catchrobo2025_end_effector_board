@@ -1,30 +1,43 @@
 #include <cstdio>
 
 #include <halx/core.hpp>
-#include <halx/peripheral.hpp>
-
 #include <halx/driver/c6x0.hpp>
+#include <halx/peripheral.hpp>
 
 extern UART_HandleTypeDef huart1; // serial servo
 extern UART_HandleTypeDef huart3; // stlink
 
 extern FDCAN_HandleTypeDef hfdcan1;
 
+static uint8_t dma_buf[8192];
+
 extern "C" void main_thread(void *) {
   using namespace halx::peripheral;
   using namespace halx::driver;
 
-  Uart<&huart1> uart1;
-  Uart<&huart3> uart3;
+  HAL_UART_DeInit(&huart1);
+  HAL_UART_DeInit(&huart3);
 
-  Can<&hfdcan1> fdcan1;
+  huart1.Init.BaudRate = 1000000;
+  huart3.Init.BaudRate = 115200;
+
+  HAL_UART_Init(&huart1);
+  HAL_UART_Init(&huart3);
+
+  std::span dma_span{dma_buf};
+  Uart<&huart1, UartTxDma, UartRxDma> uart1{dma_span.subspan<512 * 0, 512>(), dma_span.subspan<512 * 1, 512>()};
+  Uart<&huart3, UartTxDma, UartRxDma> uart3{dma_span.subspan<512 * 2, 512>(), dma_span.subspan<512 * 3, 512>()};
+
+  Can<&hfdcan1> can1;
 
   enable_stdout(uart3);
 
-  C6x0Manager c6x0_manager{fdcan1};
+  // これより上はbaud rate以外触らないほうがいいと思う
+
+  C6x0Manager c6x0_manager{can1};
   C6x0 c6x0{c6x0_manager, C6x0Type::C610, C6x0Id::ID_1};
 
-  fdcan1.start();
+  can1.start();
 
   while (true) {
     c6x0_manager.update();
