@@ -2,6 +2,7 @@
 
 #include <halx/core.hpp>
 #include <halx/driver/c6x0.hpp>
+#include <halx/dynamixel/port_handler.hpp>
 #include <halx/peripheral.hpp>
 
 extern UART_HandleTypeDef huart1;
@@ -58,6 +59,9 @@ extern "C" void main_thread(void *) {
   enable_stdout(uart3);
 
   // ここより上はbaud rate以外触らない
+
+  halx::dynamixel::PortHandler halx_dynamixel_port_handler{uart1};
+  dynamixel::PortHandler *portHandler = &halx_dynamixel_port_handler;
 
   C6x0Manager c6x0_manager{can1};
   C6x0 c6x0{c6x0_manager, C6x0Type::C610, C6x0Id::ID_1};

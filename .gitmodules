@@ -7,3 +7,6 @@
 [submodule "catchrobo2025_common"]
 	path = catchrobo2025_common
 	url = https://github.com/sanorobo/catchrobo2025_common.git
+[submodule "halx_dynamixel"]
+	path = halx_dynamixel
+	url = https://github.com/eyr1n/halx_dynamixel.git
