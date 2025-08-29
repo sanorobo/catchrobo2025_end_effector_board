@@ -28,14 +28,16 @@ extern "C" void main_thread(void *) {
   Uart<&huart1, UartTxDma, UartRxDma> uart1{dma_span.subspan<512 * 0, 512>(), dma_span.subspan<512 * 1, 512>()};
   Uart<&huart3, UartTxDma, UartRxDma> uart3{dma_span.subspan<512 * 2, 512>(), dma_span.subspan<512 * 3, 512>()};
 
-  Can<&hfdcan1> fdcan1;
+  Can<&hfdcan1> can1;
 
   enable_stdout(uart3);
 
-  C6x0Manager c6x0_manager{fdcan1};
+  // これより上はbaud rate以外触らないほうがいいと思う
+
+  C6x0Manager c6x0_manager{can1};
   C6x0 c6x0{c6x0_manager, C6x0Type::C610, C6x0Id::ID_1};
 
-  fdcan1.start();
+  can1.start();
 
   while (true) {
     c6x0_manager.update();
