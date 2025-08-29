@@ -23,7 +23,6 @@ static uint8_t uart3_rx_buf[512];
 
 extern "C" void main_thread(void *) {
   using namespace halx::peripheral;
-  using namespace halx::driver;
 
   HAL_UART_DeInit(&huart1);
   HAL_UART_DeInit(&huart3);
@@ -59,6 +58,8 @@ extern "C" void main_thread(void *) {
   enable_stdout(uart3);
 
   // ここより上はbaud rate以外触らない
+
+  using namespace halx::driver;
 
   halx::dynamixel::PortHandler halx_dynamixel_port_handler{uart1};
   dynamixel::PortHandler *portHandler = &halx_dynamixel_port_handler;
