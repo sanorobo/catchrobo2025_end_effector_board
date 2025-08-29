@@ -9,6 +9,9 @@ extern UART_HandleTypeDef huart3;
 
 extern FDCAN_HandleTypeDef hfdcan1;
 
+extern TIM_HandleTypeDef htim1;
+extern TIM_HandleTypeDef htim3;
+extern TIM_HandleTypeDef htim15;
 extern TIM_HandleTypeDef htim16;
 extern TIM_HandleTypeDef htim17;
 
@@ -34,6 +37,20 @@ extern "C" void main_thread(void *) {
   Uart<&huart3, UartTxDma, UartRxDma> uart3{uart3_tx_buf, uart3_rx_buf}; // stlink
 
   Can<&hfdcan1> can1;
+
+  Pwm pwm1_ch1{&htim1, TIM_CHANNEL_1};
+  Pwm pwm1_ch3{&htim1, TIM_CHANNEL_3};
+  Pwm pwm3_ch1{&htim3, TIM_CHANNEL_1};
+  Pwm pwm3_ch3{&htim3, TIM_CHANNEL_3};
+  Pwm pwm15_ch1{&htim15, TIM_CHANNEL_1};
+
+  Gpio air1{GPIOA, GPIO_PIN_9};
+  Gpio air2{GPIOC, GPIO_PIN_9};
+  Gpio air3{GPIOC, GPIO_PIN_7};
+  Gpio air4{GPIOB, GPIO_PIN_15};
+  Gpio air5{GPIOB, GPIO_PIN_13};
+
+  Exti<EXTI_LINE_15> limit_sw{EXTI_MODE_INTERRUPT, EXTI_TRIGGER_RISING, EXTI_GPIOA, 5, 0};
 
   Tim<&htim16> tim16; // 1kHz
   Tim<&htim17> tim17; // 10kHz
