@@ -50,6 +50,10 @@ extern "C" void main_thread(void *) {
   Gpio air4{GPIOB, GPIO_PIN_15};
   Gpio air5{GPIOB, GPIO_PIN_13};
 
+  Gpio led_r{GPIOA, GPIO_PIN_7};
+  Gpio led_g{GPIOA, GPIO_PIN_6};
+  Gpio led_b{GPIOA, GPIO_PIN_5};
+
   Exti<EXTI_LINE_15> limit_sw{EXTI_MODE_INTERRUPT, EXTI_TRIGGER_RISING, EXTI_GPIOA, 5, 0};
 
   Tim<&htim16> tim16; // 1kHz
