@@ -21,28 +21,6 @@ static uint8_t uart1_rx_buf[512];
 static uint8_t uart3_tx_buf[512];
 static uint8_t uart3_rx_buf[512];
 
-namespace halx::driver {
-
-enum class RgbColor {
-  RED,
-  GREEN,
-  BLUE,
-  WHITE,
-  NONE,
-};
-
-class RgbLed {
-public:
-  RgbLed(peripheral::Gpio &led_r, peripheral::Gpio &led_g, peripheral::Gpio &led_b) : led_r_{led_r}, led_g_{led_g}, led_b_{led_b} {}
-
-private:
-  peripheral::Gpio &led_r_;
-  peripheral::Gpio &led_g_;
-  peripheral::Gpio &led_b_;
-};
-
-} // namespace halx::driver
-
 extern "C" void main_thread(void *) {
   using namespace halx::peripheral;
 
