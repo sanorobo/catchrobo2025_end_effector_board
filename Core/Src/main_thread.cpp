@@ -21,6 +21,28 @@ static uint8_t uart1_rx_buf[512];
 static uint8_t uart3_tx_buf[512];
 static uint8_t uart3_rx_buf[512];
 
+namespace halx::driver {
+
+enum class RgbColor {
+  RED,
+  GREEN,
+  BLUE,
+  WHITE,
+  NONE,
+};
+
+class RgbLed {
+public:
+  RgbLed(peripheral::Gpio &led_r, peripheral::Gpio &led_g, peripheral::Gpio &led_b) : led_r_{led_r}, led_g_{led_g}, led_b_{led_b} {}
+
+private:
+  peripheral::Gpio &led_r_;
+  peripheral::Gpio &led_g_;
+  peripheral::Gpio &led_b_;
+};
+
+} // namespace halx::driver
+
 extern "C" void main_thread(void *) {
   using namespace halx::peripheral;
 
@@ -38,17 +60,21 @@ extern "C" void main_thread(void *) {
 
   Can<&hfdcan1> can1;
 
-  Pwm pwm1_ch1{&htim1, TIM_CHANNEL_1};
-  Pwm pwm1_ch3{&htim1, TIM_CHANNEL_3};
-  Pwm pwm3_ch1{&htim3, TIM_CHANNEL_1};
-  Pwm pwm3_ch3{&htim3, TIM_CHANNEL_3};
-  Pwm pwm15_ch1{&htim15, TIM_CHANNEL_1};
+  Pwm servo1{&htim1, TIM_CHANNEL_3};
+  Pwm servo2{&htim1, TIM_CHANNEL_1};
+  Pwm servo3{&htim3, TIM_CHANNEL_3};
+  Pwm servo4{&htim3, TIM_CHANNEL_1};
+  Pwm servo5{&htim15, TIM_CHANNEL_1};
 
   Gpio air1{GPIOA, GPIO_PIN_9};
   Gpio air2{GPIOC, GPIO_PIN_9};
   Gpio air3{GPIOC, GPIO_PIN_7};
   Gpio air4{GPIOB, GPIO_PIN_15};
   Gpio air5{GPIOB, GPIO_PIN_13};
+
+  Gpio led_r{GPIOA, GPIO_PIN_6};
+  Gpio led_g{GPIOA, GPIO_PIN_7};
+  Gpio led_b{GPIOA, GPIO_PIN_5};
 
   Exti<EXTI_LINE_15> limit_sw{EXTI_MODE_INTERRUPT, EXTI_TRIGGER_RISING, EXTI_GPIOA, 5, 0};
 
