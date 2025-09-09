@@ -61,19 +61,14 @@ target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE
     # Add user defined symbols
 )
 
-add_subdirectory(halx)
-add_subdirectory(halx_driver)
-add_subdirectory(halx_dynamixel)
 add_subdirectory(catchrobo2025_common)
+add_subdirectory(halx_dynamixel)
 
 # Add linked libraries
 target_link_libraries(${CMAKE_PROJECT_NAME}
     stm32cubemx
 
     # Add user defined libraries
-    halx
-    halx::printf_float
-    halx_driver
-    halx_dynamixel
     catchrobo2025_common
+    halx_dynamixel
 )
